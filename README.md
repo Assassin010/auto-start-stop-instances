@@ -72,7 +72,7 @@ AWS CLI (2.0+) installed
 
 # Deployment Steps
 
-1. git clone https://stash.merck.com/scm/mdbt/extra-automation.git
+1. git clone https://github.com/Assassin010/auto-start-stop-instances
 
 2. change the directory => cd auto-start-stop
 
