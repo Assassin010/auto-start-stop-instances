@@ -6,8 +6,8 @@ terraform {
     region         = "us-east-1"
     dynamodb_table = "auto-start-stop-state-lock-us-east-1"
     encrypt        = true
-    profile        = "mat_user"
-    role_arn       = "arn:aws:iam::339085260722:role/matfdna-matillion-cf-role-new"
+    profile        = "<NAME OF YOUR PROFILE HERE>" 
+    role_arn       = "<ROLE ARN HERE>"
     session_name   = "Gauthier_Kwatatshey"
   }
 }
