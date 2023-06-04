@@ -1,8 +1,6 @@
 
 # How to Reduce the Costs of Running AWS EC2 Instances
 
-Let's optimize the use of matillion servers and save some money.
-
 
 # Introduction
 
@@ -24,13 +22,14 @@ The time limit for employees for working on the instance.
 
 # Implementation
 
-Currently, the implementation is only available in the following regions:
+AWS Lambda Functions, AWS EventBridge, Python boto3 . Using this method, You can schedule the start and stop of your EC2 instances by using tags on target instances.
 
-1. US East (N. Virginia) - us-east-1
-2. Europe (Ireland) - eu-west-1
-3. Asia Pacific (Singapore) - ap-southeast-1
+The following are some advantages of utilizing scheduler on EC2:
 
-If necessary, we can also make it global or add new regions.
+Access the instance as per the working hours.
+Reduce costs.
+Stop instance from loading up on weekends.
+The time limit for employees for working on the instance.
 
 
 # Solution
@@ -43,41 +42,62 @@ value = true
 
 # Logic of the Python Code
 
-Returning All EC2 instances(InstanceI) tagged with the tag Auto-Start-Stop will be started each working day from Monday to Friday at 8:00 am UTC Which is 9:00 (UTC+1)=Prague time (CET) 
-and will stopped each working day from Monday to Friday evening at 6:00 pm UTC Which is 7:00 pm (UTC+1)=Prague time (CET) 
+Returning All EC2 instances(InstanceID) tagged with the tag Auto-Start-Stop will be started each working day from Monday to Friday at 8:00 am UTC Which is 9:00 and will stopped each working day from Monday to Friday evening at 6:00 pm UTC
 
 
 # Adjustment
 
-We can adjust the schedule time if needed manually on the console or remotely by reploying the changes using terraform since we store the state in the s3 bucket.
-
-Note: It is best practice to apply the changes using Terraform for consistency, as this will prevent a lot of confusion, inconsistency, and duplicate resources.
-
-
+Since the solution is deployed using Terraform, the schedule time adjustment should also be carried out using Terraform. However, you can also adjust the schedule time directly on the AWS console, however this is not really advised. To avoid any inconsistency or and duplicate resources, it is recommended that Terraform be used to apply the changes.
 
 
 # Remediation
 
-Remove manually the tag: "Auto-Start-Stop" on the target ec2 instances
-
+Simply remove the tag "Auto-Start-Stop" from the target EC2 instances manually.
 
 
 # Deployment pre-requisites
+Terraform CLI installed
+IAM Role/IAM User with the enough permissions.
+AWS CLI installed
+Git Installed
+10. Deployment Steps
 
-Terraform CLI (1.0+) installed
+git clone https://github.com/Assassin010/auto-start-stop-instances.git
 
-IAM Role/IAM User with the necessary permissions. IAM User (srv_deployment) assuming our IAC admin IAM Role (matfdna-matillion-cf-role-new)
+git clone git@github.com:Assassin010/auto-start-stop-instances.git
 
-AWS CLI (2.0+) installed
+Switch to the following directory => auto-start-stop
+terraform init
 
-# Deployment Steps
+terraform plan
 
-1. git clone https://github.com/Assassin010/auto-start-stop-instances
+terraform apply --auto-approve
+To completely decommission the solution
+terraform destroy --auto-approve 
+11. Summary
 
-2. change the directory => cd auto-start-stop
+So far, we've seen the utility of Event-Driven infrastructure, how services respond to events, and a use case in which a serverless compute service runs based on storage events and notifies a user via email. In addition, we used Infrastructure as a Code (IaaC) by using terragrunt + terraform to create and destroy all resources.
 
-3. terraform init
+12. References
 
-4. terraform plan
+https://aws.amazon.com/ec2/
+https://aws.amazon.com/lambda/
+https://www.terraform.io
+https://aws.amazon.com/cloudtrail/
+https://aws.amazon.com/s3/
+https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
 
-5. terraform apply --auto-approve
+Happy coding!
+END - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+If you like my work and want to support me…
+The BEST way is following me on dev.to here
+
+Feel free to give likes/claps, or writing comments so I know how helpful this post was for you.
+
+Gauthier Kwatatshey__
+Connect with me on LinkdIn : https://www.linkedin.com/in/gauthier-kwatatshey-b9a66715b
+
+Dev.to : https://dev.to/aws-builders/how-to-cut-down-the-costs-of-running-aws-servers-elastic-compute-3ch5
+
+Medium : https://medium.com/@gauthier.kwatatshey/how-to-cut-down-the-costs-of-running-aws-servers-elastic-compute-1a87293eea57
