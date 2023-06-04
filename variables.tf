@@ -84,10 +84,6 @@ variable "code_maintainerTag" {
   type = string
 }
 
-variable "terraform-pathTag" {
-  type = string
-}
-
 variable "repository_urlTag" {
   type = string
 }
